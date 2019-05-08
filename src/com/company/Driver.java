@@ -8,7 +8,7 @@ public class Driver {
             //conn to DB
 
 
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ecole?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/projet_bdd?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
             //Create statement
             Statement stmt = conn.createStatement();
             //SQL Query
