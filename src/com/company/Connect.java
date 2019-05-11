@@ -23,7 +23,7 @@ public class Connect {
 
 
             Administrateur admin = new Administrateur("Louis","Potterie","M");
-            admin.creationGroupe(stmt,conn,3);
+            admin.creationIdentite(stmt,conn);
 
 
             rset.close();

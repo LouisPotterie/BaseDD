@@ -39,6 +39,68 @@ public class Administrateur {
         this.sexe = sexe;
     }
 
+    public int creationIdentite(Statement stmt,Connection conn)
+    {
+        System.out.println("Vous allez ajouter une identite \n\nSaisir son nom :");
+        Scanner sc = new Scanner(System.in);
+        String nom = sc.nextLine();
+        System.out.println("Son prenom : ");
+        String prenom = sc.nextLine();
+        System.out.println("Sexe : ");
+        String sexe = sc.nextLine();
+        int identite_id = 0;
+
+        try {
+            PreparedStatement requete = conn.prepareStatement("INSERT INTO identite (prenom,nom,sexe) VALUES (?,?,?)");
+            requete.setString(1,prenom);
+            requete.setString(2,nom);
+            requete.setString(3,sexe);
+            requete.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+
+
+            ResultSet result = stmt.executeQuery("SELECT COUNT(identite_id) FROM identite");
+            result.next();
+            identite_id = result.getInt(1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return identite_id;
+
+    }
+
+
+
+    public static int NouveauMatricule(Statement stmt, Connect conn) throws SQLException{
+
+
+        int Matricule;
+
+        ResultSet result_count_Matricule = stmt.executeQuery("SELECT COUNT(matricule_etudiant_id) FROM etudiant");
+        result_count_Matricule.next();
+        int nbr_eleve_m = result_count_Matricule.getInt(1);
+        if (nbr_eleve_m == 0) {
+            return 2019001;
+        }
+        else {
+            ResultSet result_Matricule = stmt.executeQuery("SELECT * FROM etudiant");
+            result_Matricule.next();
+            int nbr_matricule = result_Matricule.getInt(1);
+            Matricule = nbr_matricule + nbr_eleve_m;
+        }
+
+        return Matricule;
+    }
+
+
+
     public void creationGroupe(Statement stmt, Connection conn, int a)
     {
         try {
@@ -78,16 +140,18 @@ public class Administrateur {
 
     }
 
-    public void creationProfesseur(Statement stmt, Connection conn, int matricule_professeur_id, int coordonnee_id, int identite_id)
+    public void creationProfesseur(Statement stmt, Connection conn, int coordonne_id ,int id)
     {
         try {
             System.out.println("Création d'un nouveau professeur");
             //stmt.executeUpdate("INSERT INTO groupe VALUES ('')");
 
+            int matricule_professeur_id = 1 + (int)(Math.random() * ((1000 - 1) + 1));;
+
             PreparedStatement requete = conn.prepareStatement("INSERT INTO professeur (matricule_professeur_id,coordonnée_id,identité_id) VALUES (?,?,?)");
             requete.setInt(1,matricule_professeur_id);
-            requete.setInt(2,coordonnee_id);
-            requete.setInt(3,identite_id);
+            requete.setInt(2, coordonne_id);
+            requete.setInt(3,id);
 
 
             requete.execute();
