@@ -10,7 +10,7 @@ public class Connect {
             //Class.forName("org.postgresql.Driver");
             System.out.println("Driver O.K.");
 
-            String url = "jdbc:mysql://localhost:3306/projet_bdd?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+            String url = "jdbc:mysql://localhost:3306/bdd?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
             String user = "root";
             String passwd = "";
 
@@ -23,7 +23,27 @@ public class Connect {
 
 
             Administrateur admin = new Administrateur("Louis","Potterie","M");
-            admin.creationIdentite(stmt,conn);
+
+            //Creation prof
+            /*
+            int adresse = admin.creationAdresse(stmt,conn);
+            int coordonnee = admin.creationCoordonnee(stmt,conn,adresse);
+            int id = admin.creationIdentite(stmt,conn);
+            admin.creationProfesseur(stmt,conn,coordonnee,id);
+            */
+
+            //Creation Responsable
+            /*
+            int adresse = admin.creationAdresse(stmt,conn);
+            int coordonnee = admin.creationCoordonnee(stmt,conn,adresse);
+            int id = admin.creationIdentite(stmt,conn);
+            admin.creationResponsable(stmt,conn,coordonnee,id);
+            */
+
+            admin.creationCours(stmt,conn);
+
+
+
 
 
             /*Administrateur  admin = new Administrateur("Louis","Potterie","M");

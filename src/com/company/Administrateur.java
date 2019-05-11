@@ -78,6 +78,85 @@ public class Administrateur {
 
     }
 
+    public int creationAdresse(Statement stmt,Connection conn)
+    {
+        System.out.println("Vous allez ajouter une adresse \n\n Saisir son numero de rue :");
+        Scanner sc = new Scanner(System.in);
+        Scanner sc1 = new Scanner(System.in);
+        int numero_rue = sc.nextInt();
+        System.out.println("Nom de rue : ");
+        String nom_rue = sc1.nextLine();
+        System.out.println("Code Postal : ");
+        int code_postal= sc.nextInt();
+        System.out.println("Ville: ");
+        String ville= sc1.nextLine();
+        int adresse_id = 0;
+
+        try {
+            PreparedStatement requete = conn.prepareStatement("INSERT INTO adresse (numero_rue,nom_rue,code_postal,ville) VALUES (?,?,?,?)");
+            requete.setInt(1,numero_rue);
+            requete.setString(2,nom_rue);
+            requete.setInt(3, code_postal);
+            requete.setString(4, ville);
+            requete.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+
+
+            ResultSet result = stmt.executeQuery("SELECT COUNT(adresse_id) FROM adresse");
+            result.next();
+            adresse_id = result.getInt(1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return adresse_id;
+
+    }
+
+    public int creationCoordonnee(Statement stmt, Connection conn, int adresse_id)
+    {
+        System.out.println("Vous allez ajouter une Coordonnee  \n\n Saisir son numero de telephone:");
+        Scanner sc = new Scanner(System.in);
+        Scanner sc1 = new Scanner(System.in);
+        int numero_telephone = sc.nextInt();
+        System.out.println("mail : ");
+        String mail = sc1.nextLine();
+
+        //int adresse_id = creationAdresse(stmt,conn);
+        int coordonnee_id =0;
+
+
+        try {
+            PreparedStatement requete = conn.prepareStatement("INSERT INTO coordonnee (adresse_id,numero_telephone,mail) VALUES (?,?,?)");
+            requete.setInt(1,adresse_id);
+            requete.setInt(2,numero_telephone);
+            requete.setString(3, mail);
+            requete.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+
+
+            ResultSet result = stmt.executeQuery("SELECT COUNT(coordonnee_id) FROM coordonnee");
+            result.next();
+            coordonnee_id = result.getInt(1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return coordonnee_id;
+
+
+    }
+
 
 
     public static int NouveauMatricule(Statement stmt, Connect conn) throws SQLException{
@@ -142,20 +221,24 @@ public class Administrateur {
 
     }
 
-    public void creationProfesseur(Statement stmt, Connection conn, int coordonne_id ,int id)
+    public void creationProfesseur(Statement stmt, Connection conn,int coordonne_id, int id )
     {
+        //int coordonne_id = creationCoordonnee(stmt,conn);
+        //int id =creationIdentite(stmt,conn);
+
+        System.out.println("Coordonnee : " + coordonne_id);
+        System.out.println("Id :" + id);
+
         try {
             System.out.println("Création d'un nouveau professeur");
-            //stmt.executeUpdate("INSERT INTO groupe VALUES ('')");
-
-            int matricule_professeur_id = 1 + (int)(Math.random() * ((1000 - 1) + 1));;
-
-            PreparedStatement requete = conn.prepareStatement("INSERT INTO professeur (matricule_professeur_id,coordonnée_id,identité_id) VALUES (?,?,?)");
-            requete.setInt(1,matricule_professeur_id);
-            requete.setInt(2, coordonne_id);
-            requete.setInt(3,id);
 
 
+
+
+            PreparedStatement requete = conn.prepareStatement("INSERT INTO professeur (coordonnée_id,identité_id) VALUES (?,?)");
+
+            requete.setInt(1, coordonne_id);
+            requete.setInt(2, id);
             requete.execute();
 
         }
@@ -164,18 +247,24 @@ public class Administrateur {
         }
 
 
+
     }
 
-    public void creationResponsable(Statement stmt, Connection conn, int responsable_id, int coordonnee_id, int identite_id)
+
+
+
+
+    public void creationResponsable(Statement stmt, Connection conn, int coordonnee_id, int identite_id)
     {
         try {
             System.out.println("Création d'un nouveau responsable");
             //stmt.executeUpdate("INSERT INTO groupe VALUES ('')");
 
-            PreparedStatement requete = conn.prepareStatement("INSERT INTO responsable (responsable_id, coordonnee_id, identite_id) VALUES (?,?,?)");
-            requete.setInt(1,responsable_id);
-            requete.setInt(2,coordonnee_id);
-            requete.setInt(3,identite_id);
+
+            PreparedStatement requete = conn.prepareStatement("INSERT INTO responsable (coordonnee_id, identite_id) VALUES (?,?)");
+
+           requete.setInt(1,coordonnee_id);
+           requete.setInt(2,identite_id);
 
             requete.execute();
 
@@ -187,23 +276,42 @@ public class Administrateur {
 
     }
 
-    public void creationCours(Statement stmt, Connection conn, int cours_id, String nom, String description, int annee, int evaluation_id, int matricule_professeur_id, int coefficient, int pourcentage_DE, int pourcentage_TP, int pourcentage_Projet)
+    public void creationCours(Statement stmt, Connection conn)
     {
+
+
+        System.out.println("Vous allez ajouter un cours \n\n Saisir le nom du cours :");
+        Scanner sc = new Scanner(System.in);
+        Scanner sc1 = new Scanner(System.in);
+        String nom = sc.nextLine();
+        System.out.println("Description : ");
+        String description = sc1.nextLine();
+        System.out.println("Annee : ");
+        int annee = sc.nextInt();
+        System.out.println(" Coefficient : ");
+        int coefficient = sc1.nextInt();
+        System.out.println(" Pourcentage DE : ");
+        int pourcentage_DE = sc1.nextInt();
+        System.out.println(" Pourcentage TP : ");
+        int pourcentage_TP = sc1.nextInt();
+        System.out.println(" Pourcentage projet : ");
+        int pourcentage_Projet = sc1.nextInt();
+
+
         try {
             System.out.println("Création d'un nouveau cours ");
             //stmt.executeUpdate("INSERT INTO groupe VALUES ('')");
 
-            PreparedStatement requete = conn.prepareStatement("INSERT INTO cours (cours_id, nom, description, année, coefficient_cours, evaluation_id, matricule_professeur_id, pourcentage_DE, pourcentage_TP, pourcentage_Projet) VALUES (?,?,?,?,?,?,?,?,?,?)");
-            requete.setInt(1,cours_id);
-            requete.setString(2,nom);
-            requete.setString(3,description);
-            requete.setInt(4,annee);
-            requete.setInt(5,evaluation_id);
-            requete.setInt(6, matricule_professeur_id);
-            requete.setInt(7,coefficient);
-            requete.setInt(8,pourcentage_DE);
-            requete.setInt(9,pourcentage_TP);
-            requete.setInt(10,pourcentage_Projet);
+            PreparedStatement requete = conn.prepareStatement("INSERT INTO cours (nom, description, année, coefficient_cours, pourcentage_DE, pourcentage_TP, pourcentage_Projet) VALUES (?,?,?,?,?,?,?)");
+
+            requete.setString(1,nom);
+            requete.setString(2,description);
+            requete.setInt(3,annee);
+
+            requete.setInt(4,coefficient);
+            requete.setInt(5,pourcentage_DE);
+            requete.setInt(6,pourcentage_TP);
+            requete.setInt(7,pourcentage_Projet);
 
             requete.execute();
 
@@ -296,7 +404,7 @@ public class Administrateur {
         }
     }
 
-    public void afficherListeTD(Statement stmt, Connection conn, int groupe_id,) {
+    public void afficherListeTD(Statement stmt, Connection conn, int groupe_id) {
         try {
             ResultSet res = stmt.executeQuery("SELECT g.*, e.* FROM groupe_etudiant g, etudiant e  WHERE g.groupe_id = "+groupe_id+" and g.matricule_etudiant_id = e.matricule_etudiant_id;");
             while(res.next()) {
