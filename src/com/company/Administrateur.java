@@ -1,4 +1,6 @@
 package com.company;
+import com.mysql.cj.protocol.x.StatementExecuteOkMessageListener;
+
 import java.sql.*;
 import java.util.Scanner;
 
@@ -165,6 +167,47 @@ public class Administrateur {
 
             requete.execute();
         }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateEvaluation(Statement stmt, Connection conn, int eval_id) {
+        try {
+            int choix;
+            int note;
+            int pourcentage;
+            String type_eval = new String();
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Que voulez-vous modifier");
+            System.out.println("1. Note\n2. type_eval\n3. pourcentage\nChoix :");
+            choix = sc.nextInt();
+            switch(choix){
+                case 1:
+                    System.out.println("Inserez la nouvelle note :");
+                    note = sc.nextInt();
+                    PreparedStatement requete_note = conn.prepareStatement("UPDATE evaluation SET note = "+ note +" WHERE evaluation_id = "+eval_id+";");
+                    requete_note.execute();
+                    break;
+                case 2:
+                    System.out.println("Inscrivez le nouveau type d'evaluation :");
+                    type_eval = sc.nextLine();
+                    PreparedStatement requete_type = conn.prepareStatement("UPDATE evaluation SET type_evaluation = \""+type_eval+"\" WHERE evaluation_id = "+eval_id+";");
+                    requete_type.execute();
+                    break;
+                case 3:
+                    System.out.println("Inserez le nouveau pourcentage :");
+                    pourcentage = sc.nextInt();
+                    PreparedStatement requete_pourcentage = conn.prepareStatement("UPDATE evaluation SET pourcentage = "+ pourcentage +" WHERE evaluation_id = "+eval_id+";");
+                    break;
+
+                default:
+                    System.out.println("choix non valide");
+                    break;
+            }
+
+        }
+
         catch (Exception e) {
             e.printStackTrace();
         }
