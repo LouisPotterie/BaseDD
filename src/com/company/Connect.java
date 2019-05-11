@@ -24,7 +24,8 @@ public class Connect {
 
             Administrateur  admin = new Administrateur("Louis","Potterie","M");
             //admin.creationEvaluation(stmt,conn,1,15,"DE",60,1);
-            admin.updateEvaluation(stmt,conn,1);
+            //admin.updateEvaluation(stmt,conn,1);
+            admin.creationReleveNote(stmt,conn,1);
             rset.close();
             stmt.close();
 

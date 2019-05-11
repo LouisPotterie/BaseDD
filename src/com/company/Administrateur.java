@@ -151,19 +151,19 @@ public class Administrateur {
 
     }
 
-    public void creationEvaluation(Statement stmt, Connection conn, int eval_id,int note, String type_eval, int pourcentage, int cours_id  )
+    public void creationEvaluation(Statement stmt, Connection conn, int eval_id,int note, String type_eval, int pourcentage, int cours_id, int etudiant_id  )
     {
         try {
             System.out.println("Création d'une evaluation ");
             //stmt.executeUpdate("INSERT INTO groupe VALUES ('')");
 
-            PreparedStatement requete = conn.prepareStatement("INSERT INTO evaluation (evaluation_id, note, type_evaluation, pourcentage, cours_id) VALUES (?,?,?,?,?)");
+            PreparedStatement requete = conn.prepareStatement("INSERT INTO evaluation (evaluation_id, note, type_evaluation, pourcentage, cours_id, etudiant_id) VALUES (?,?,?,?,?,?)");
             requete.setInt(1,eval_id);
             requete.setInt(2,note);
             requete.setString(3,type_eval);
             requete.setInt(4,pourcentage);
             requete.setInt(5,cours_id);
-
+            requete.setInt(6,etudiant_id);
 
             requete.execute();
         }
@@ -177,7 +177,7 @@ public class Administrateur {
             int choix;
             int note;
             int pourcentage;
-            String type_eval = new String();
+            String type_eval;
             Scanner sc = new Scanner(System.in);
             System.out.println("Que voulez-vous modifier");
             System.out.println("1. Note\n2. type_eval\n3. pourcentage\nChoix :");
@@ -199,6 +199,7 @@ public class Administrateur {
                     System.out.println("Inserez le nouveau pourcentage :");
                     pourcentage = sc.nextInt();
                     PreparedStatement requete_pourcentage = conn.prepareStatement("UPDATE evaluation SET pourcentage = "+ pourcentage +" WHERE evaluation_id = "+eval_id+";");
+                    requete_pourcentage.execute();
                     break;
 
                 default:
@@ -213,6 +214,35 @@ public class Administrateur {
         }
 
 
+    }
+
+    public void creationReleveNote(Statement stmt, Connection conn, int etudiant_id) {
+        try {
+            ResultSet res = stmt.executeQuery("SELECT e.*, c.nom FROM evaluation e, cours c WHERE e.etudiant_id = "+etudiant_id+" and e.cours_id = c.cours_id;");
+            while(res.next()) {
+                System.out.println("\n");
+                System.out.println("Cours :"+res.getString("c.nom"));
+                System.out.println("Note :"+res.getString("e.note"));
+                System.out.println("Type d'evaluation :"+res.getString("e.type_evaluation"));
+                System.out.println("% :"+res.getString("e.pourcentage"));
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void afficherListeTD(Statement stmt, Connection conn, int groupe_id,) {
+        try {
+            ResultSet res = stmt.executeQuery("SELECT g.*, e.* FROM groupe_etudiant g, etudiant e  WHERE g.groupe_id = "+groupe_id+" and g.matricule_etudiant_id = e.matricule_etudiant_id;");
+            while(res.next()) {
+                System.out.println("\n");
+
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
