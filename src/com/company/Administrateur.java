@@ -148,4 +148,29 @@ public class Administrateur {
 
 
     }
+
+    public void creationEvaluation(Statement stmt, Connection conn, int eval_id,int note, String type_eval, int pourcentage, int cours_id  )
+    {
+        try {
+            System.out.println("Création d'une evaluation ");
+            //stmt.executeUpdate("INSERT INTO groupe VALUES ('')");
+
+            PreparedStatement requete = conn.prepareStatement("INSERT INTO evaluation (evaluation_id, note, type_evaluation, pourcentage, cours_id) VALUES (?,?,?,?,?)");
+            requete.setInt(1,eval_id);
+            requete.setInt(2,note);
+            requete.setString(3,type_eval);
+            requete.setInt(4,pourcentage);
+            requete.setInt(5,cours_id);
+
+
+            requete.execute();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
 }
