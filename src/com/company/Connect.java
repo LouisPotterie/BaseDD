@@ -93,14 +93,14 @@ public class Connect {
 
 
                             int responsable_id = admin.creationResponsable(stmt,conn,coordonnee2,id2);
-                            admin.creationEtudiant(stmt,conn, coordonnee_id, identite_id, responsable_id);
+                            int new_etudiant = admin.creationEtudiant(stmt,conn, coordonnee_id, identite_id, responsable_id);
 
-                            System.out.println("Voulez vous assigner l'etudiant à un cours ?");
+                            System.out.println("Voulez vous assigner l'etudiant à un cours ? 1 pour oui 2 pour non ");
                             Scanner key2 = new Scanner(System.in);
                             int answer2 = key2.nextInt();
                             if (answer2 == 1 )
                             {
-                                admin.associationEtudiantGroupe(stmt,conn);
+                                admin.associationEtudiantGroupe2(stmt,conn, new_etudiant);
                             }
 
                             break;
@@ -167,7 +167,14 @@ public class Connect {
 
                         case 9:
 
-                            exit = 1;
+                            System.out.println("Etes vous sur de fermer l'application ? (1 : oui) (2 : non)");
+                            Scanner abc = new Scanner(System.in);
+                            int end = abc.nextInt();
+
+                            if (end == 1)
+                            {
+                                exit = 1;
+                            }
 
                             break;
                     }
@@ -190,7 +197,7 @@ public class Connect {
                 do {
                     System.out.println(" ~~~~~ Menu Professeur  ~~~~~ \n");
                     System.out.println(" 1) Ajouter une note ");
-                    System.out.println(" 2)Voir les bulletins Eleve");
+                    System.out.println(" 2) Voir les bulletins Eleve");
                     System.out.println(" 3) Voir la liste des etudiants d'un groupe ");
 
                     System.out.println(" 5) Quitter ");
@@ -239,7 +246,10 @@ public class Connect {
 
                         case 3:
 
-                            prof.afficherListeTD2(stmt,conn,1);
+                            Scanner input2 = new Scanner(System.in);
+                            System.out.println("Quel est le groupe id du groupe à afficher ? ");
+                            int grp_id = input2.nextInt();
+                            prof.afficherListeTD2(stmt,conn,grp_id);
                             break;
 
                         case 4:
@@ -249,8 +259,14 @@ public class Connect {
 
                         case 5 :
 
-                            exit = 1;
-                            break;
+                            System.out.println("Etes vous sur de fermer l'application ? (1 : oui) (2 : non)");
+                            Scanner abc = new Scanner(System.in);
+                            int end = abc.nextInt();
+
+                            if (end == 1)
+                            {
+                                exit = 1;
+                            }
 
                     }
                 }while(exit!=1);
@@ -263,86 +279,66 @@ public class Connect {
             if (type_user == 3)
             {
                 Etudiant etudiant = new Etudiant();
+                int choix =0;
+                int exit =0;
 
-                int choix = 0;
+                do {
+
+                    System.out.println(" ~~~~~ Menu Etudiant  ~~~~~ \n");
+                    System.out.println(" 1) Bulletin de note ");
+                    System.out.println(" 2) Voir la liste des etudiants d'un groupe ");
+                    System.out.println(" 3) Quitter ");
+
+                    System.out.println("Que voulez-vous faire ? ");
+                    Scanner kb = new Scanner(System.in);
+                    choix = kb.nextInt();
+
+                    switch (choix)
+                    {
+                        case 1:
+
+                            etudiant.creationReleveNote(stmt,conn);
+
+                            break;
+
+                        case 2:
+
+                            Scanner input2 = new Scanner(System.in);
+                            System.out.println("Quel est le groupe id du groupe à afficher ? ");
+                            int grp_id = input2.nextInt();
+                            etudiant.afficherListeTD2(stmt,conn,grp_id);
+                            break;
+
+                        case 3:
+                            System.out.println("Etes vous sur de fermer l'application ? (1 : oui) (2 : non)");
+                            Scanner abc = new Scanner(System.in);
+                            int end = abc.nextInt();
+
+                            if (end == 1)
+                            {
+                                exit = 1;
+                            }
+                            break;
+
+
+                    }
+            }while(exit !=1);
+
 
 
 
             }
 
-
-
-            //Creation prof
-            /*
-            int adresse = admin.creationAdresse(stmt,conn);
-            int coordonnee = admin.creationCoordonnee(stmt,conn,adresse);
-            int id = admin.creationIdentite(stmt,conn);
-            admin.creationProfesseur(stmt,conn,coordonnee,id);
-            */
-
-            //Creation Responsable
-            /*
-            int adresse = admin.creationAdresse(stmt,conn);
-            int coordonnee = admin.creationCoordonnee(stmt,conn,adresse);
-            int id = admin.creationIdentite(stmt,conn);
-            admin.creationResponsable(stmt,conn,coordonnee,id);
-            */
-
-            //Creation cours
-            /*
-            admin.creationCours(stmt,conn);
-            */
-
-
-            /* Creation etudiant
-            System.out.println(" ~~ Création du responsable de l'etudiant ~~ \n");
-
-            int adresse = admin.creationAdresse(stmt,conn);
-            int coordonnee = admin.creationCoordonnee(stmt,conn,adresse);
-            int id = admin.creationIdentite(stmt,conn);
-
-            System.out.println("L'etudiant et le responsable ont ils la meme adresse ? (1 pour oui) / (2 pour non) \n");
-
-            Scanner kb = new Scanner(System.in);
-
-            int choix = kb.nextInt();
-
-            if (choix == 2)
-            {
-                adresse =0;
-                adresse=admin.creationAdresse(stmt,conn);
-            }
-
-            System.out.println(" \n ~~ Création du de l'etudiant ~~ \n");
-
-            int coordonnee_id = admin.creationCoordonnee(stmt,conn,adresse);
-            int identite_id = admin.creationIdentite(stmt,conn);
-
-
-            int responsable_id = admin.creationResponsable(stmt,conn,coordonnee,id);
-            admin.creationEtudiant(stmt,conn, coordonnee_id, identite_id, responsable_id);
-
-            */
-
-            //admin.associationProfesseurCours(stmt,conn);
-
-
-
-            /*Administrateur  admin = new Administrateur("Louis","Potterie","M");
-            //admin.creationEvaluation(stmt,conn,1,15,"DE",60,1);
-            //admin.updateEvaluation(stmt,conn,1);
-            admin.creationReleveNote(stmt,conn,1);
-            */
 
             stmt.close();
-
-
-
-
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
-    }
+
+        }
+
+
 
     public static int connexion(Statement stmt, Connection conn)
     {
@@ -354,6 +350,7 @@ public class Connect {
 
         do {
 
+            System.out.println("~~~~ Connexion ~~~~");
             System.out.println("Id : ");
             String id = kb.nextLine();
 

@@ -202,13 +202,14 @@ public class Administrateur {
 
     }
 
-    public void creationEtudiant(Statement stmt, Connection conn, int coordonnee_id, int identite_id, int responsable_id)
+    public int creationEtudiant(Statement stmt, Connection conn, int coordonnee_id, int identite_id, int responsable_id)
     {
+        int  matricule_etudiant_id =0;
         try {
             System.out.println("Création d'un nouveau etudiant");
             //stmt.executeUpdate("INSERT INTO groupe VALUES ('')");
 
-            int matricule_etudiant_id = NouveauMatricule(stmt,conn);
+            matricule_etudiant_id = NouveauMatricule(stmt,conn);
 
             System.out.println("Matricule " + matricule_etudiant_id);
 
@@ -226,6 +227,8 @@ public class Administrateur {
         catch (Exception e) {
             e.printStackTrace();
         }
+
+        return  matricule_etudiant_id;
 
 
     }
@@ -497,6 +500,70 @@ public class Administrateur {
 
         try {
             System.out.println("Choisir un groupe : ");
+            Scanner kb = new Scanner(System.in);
+
+            String nom_groupe = kb.nextLine();
+
+            PreparedStatement groupe = conn.prepareStatement("SELECT groupe_id FROM groupe WHERE nom_groupe = ?");
+            groupe.setString(1,nom_groupe);
+            ResultSet rs = groupe.executeQuery();
+            while (rs.next())
+            {
+                stockage2 = rs.getInt("groupe_id");
+            }
+
+            System.out.println(stockage2);
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            System.out.println("Assignation d'un etudiant à son groupe ");
+
+
+            PreparedStatement requete = conn.prepareStatement("INSERT INTO groupe_etudiant (groupe_id,matricule_etudiant_id) VALUES (?,?)");
+
+            requete.setInt(1,stockage2);
+            requete.setInt(2,stockage);
+
+            requete.execute();
+
+        }
+
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void associationEtudiantGroupe2 (Statement stmt, Connection conn, int matricule_etudiant_id)
+    {
+        int stockage =0;
+        int stockage2=0;
+
+        try {
+
+            PreparedStatement etudiant = conn.prepareStatement("SELECT matricule_etudiant_id FROM etudiant WHERE matricule_etudiant_id = ?");
+            etudiant.setInt(1,matricule_etudiant_id);
+            ResultSet rs = etudiant.executeQuery();
+            while (rs.next())
+            {
+                stockage = rs.getInt("matricule_etudiant_id");
+            }
+
+            System.out.println(stockage);
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            System.out.println("Choisir un groupe (A / B / C) : ");
             Scanner kb = new Scanner(System.in);
 
             String nom_groupe = kb.nextLine();
