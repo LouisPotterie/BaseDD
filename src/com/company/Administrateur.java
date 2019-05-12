@@ -16,6 +16,8 @@ public class Administrateur {
         this.sexe = sexe;
     }
 
+    public Administrateur() {
+    }
 
     public String getPrenom() {
         return prenom;
