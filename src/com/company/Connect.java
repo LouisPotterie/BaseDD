@@ -44,6 +44,10 @@ public class Connect {
 
                     System.out.println(" 9) Quitter ");
 
+                    System.out.println("Que voulez-vous faire ? ");
+                    Scanner kb = new Scanner(System.in);
+                    choix = kb.nextInt();
+
                     switch (choix)
                     {
                         case 1:
@@ -72,14 +76,14 @@ public class Connect {
 
                             System.out.println("L'etudiant et le responsable ont ils la meme adresse ? (1 pour oui) / (2 pour non) \n");
 
-                            Scanner kb = new Scanner(System.in);
+                            Scanner kb2 = new Scanner(System.in);
 
-                            int choix2 = kb.nextInt();
+                            int choix2 = kb2.nextInt();
 
                             if (choix2 == 2)
                             {
                                 adresse =0;
-                                adresse=admin.creationAdresse(stmt,conn);
+                               adresse=admin.creationAdresse(stmt,conn);
                             }
 
                             System.out.println(" \n ~~ Création du de l'etudiant ~~ \n");

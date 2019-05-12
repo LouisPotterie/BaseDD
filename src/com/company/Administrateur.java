@@ -393,9 +393,15 @@ public class Administrateur {
             Scanner input12 = new Scanner(System.in);
             int etudiant_ID = input12.nextInt();
 
-            PreparedStatement requete_eval = conn.prepareStatement("SELECT evaluation_id FROM evaluation WHERE cours_id = ? AND etudiant_ID = ?");
+            System.out.println("Quel type d'evaluation vous voulez modifier ? DE / TP / CE");
+            Scanner input13 = new Scanner(System.in);
+            String type_eval2 = input13.nextLine();
+
+
+            PreparedStatement requete_eval = conn.prepareStatement("SELECT evaluation_id FROM evaluation WHERE cours_id = ? AND etudiant_ID = ? AND type_evaluation = ?");
             requete_eval.setInt(1, stockage_cours);
             requete_eval.setInt(2, etudiant_ID);
+            requete_eval.setString(3,type_eval2);
 
             ResultSet resultat2 = requete_eval.executeQuery();
 
@@ -403,8 +409,6 @@ public class Administrateur {
             {
                 eval_id = resultat2.getInt("evaluation_id");
             }
-
-
 
 
             Scanner sc = new Scanner(System.in);
