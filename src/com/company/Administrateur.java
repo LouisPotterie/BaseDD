@@ -1,8 +1,9 @@
 package com.company;
 import com.mysql.cj.protocol.x.StatementExecuteOkMessageListener;
+import java.util.*;
 
 import java.sql.*;
-import java.util.Scanner;
+
 
 public class Administrateur {
 
@@ -343,19 +344,19 @@ public class Administrateur {
 
     }
 
-    public void creationEvaluation(Statement stmt, Connection conn, int eval_id,int note, String type_eval, int pourcentage, int cours_id, int etudiant_id  )
+    public void creationEvaluation(Statement stmt, Connection conn ,int note, String type_eval, int pourcentage, int cours_id, int etudiant_id)
     {
         try {
             System.out.println("Création d'une evaluation ");
             //stmt.executeUpdate("INSERT INTO groupe VALUES ('')");
 
-            PreparedStatement requete = conn.prepareStatement("INSERT INTO evaluation (evaluation_id, note, type_evaluation, pourcentage, cours_id, etudiant_id) VALUES (?,?,?,?,?,?)");
-            requete.setInt(1,eval_id);
-            requete.setInt(2,note);
-            requete.setString(3,type_eval);
-            requete.setInt(4,pourcentage);
-            requete.setInt(5,cours_id);
-            requete.setInt(6,etudiant_id);
+            PreparedStatement requete = conn.prepareStatement("INSERT INTO evaluation (note, type_evaluation, pourcentage, cours_id, etudiant_id) VALUES (?,?,?,?,?)");
+
+            requete.setInt(1,note);
+            requete.setString(2,type_eval);
+            requete.setInt(3,pourcentage);
+            requete.setInt(4,cours_id);
+            requete.setInt(5,etudiant_id);
 
             requete.execute();
         }
@@ -364,12 +365,48 @@ public class Administrateur {
         }
     }
 
-    public void updateEvaluation(Statement stmt, Connection conn, int eval_id) {
+    public void updateEvaluation(Statement stmt, Connection conn) {
         try {
             int choix;
             int note;
             int pourcentage;
+            int eval_id = 0;
             String type_eval;
+            String nom_cours;
+            System.out.println("Quel est le nom du cours ? ");
+            Scanner string = new Scanner(System.in);
+            int stockage_cours =0;
+            nom_cours = string.nextLine();
+
+            PreparedStatement requete_nom = conn.prepareStatement("SELECT cours_id FROM cours WHERE nom = ? ");
+            requete_nom.setString(1, nom_cours);
+
+            ResultSet resultat = requete_nom.executeQuery();
+
+            while(resultat.next())
+            {
+                stockage_cours = resultat.getInt("cours_id");
+            }
+
+
+            System.out.println("Quel est l'id de l'etudiant ?");
+            Scanner input12 = new Scanner(System.in);
+            int etudiant_ID = input12.nextInt();
+
+            PreparedStatement requete_eval = conn.prepareStatement("SELECT evaluation_id FROM evaluation WHERE cours_id = ? AND etudiant_ID = ?");
+            requete_eval.setInt(1, stockage_cours);
+            requete_eval.setInt(2, etudiant_ID);
+
+            ResultSet resultat2 = requete_eval.executeQuery();
+
+            while(resultat2.next())
+            {
+                eval_id = resultat2.getInt("evaluation_id");
+            }
+
+
+
+
             Scanner sc = new Scanner(System.in);
             System.out.println("Que voulez-vous modifier");
             System.out.println("1. Note\n2. type_eval\n3. pourcentage\nChoix :");
@@ -411,6 +448,7 @@ public class Administrateur {
     public void creationReleveNote(Statement stmt, Connection conn, int etudiant_id) {
         try {
             ResultSet res = stmt.executeQuery("SELECT e.*, c.nom FROM evaluation e, cours c WHERE e.etudiant_id = "+etudiant_id+" and e.cours_id = c.cours_id;");
+            System.out.println(" ~~~~~ Bulletin de note ~~~~~ ");
             while(res.next()) {
                 System.out.println("\n");
                 System.out.println("Cours :"+res.getString("c.nom"));
@@ -424,18 +462,7 @@ public class Administrateur {
         }
     }
 
-    public void afficherListeTD(Statement stmt, Connection conn, int groupe_id) {
-        try {
-            ResultSet res = stmt.executeQuery("SELECT g.*, e.* FROM groupe_etudiant g, etudiant e  WHERE g.groupe_id = "+groupe_id+" and g.matricule_etudiant_id = e.matricule_etudiant_id;");
-            while(res.next()) {
-                System.out.println("\n");
 
-            }
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public void associationEtudiantGroupe (Statement stmt, Connection conn)
     {
@@ -571,6 +598,65 @@ public class Administrateur {
         catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    public void afficherListeTD(Statement stmt, Connection conn, int groupe_id) {
+        try {
+
+            ResultSet res = stmt.executeQuery("SELECT g., e. FROM groupe_etudiant g, etudiant e  WHERE g.groupe_id = "+groupe_id+" AND g.matricule_etudiant_id = e.matricule_etudiant_id;");
+            ArrayList<String> mat = new ArrayList<String>();
+            while(res.next()) {
+                mat.add(res.getString("e.matricule_etudiant_id"));
+                ResultSet resBis = stmt.executeQuery("SELECT i.Prenom, i.nom FROM identite i WHERE i.identite_id = "+res.getString("e.identite_id"));
+                while(resBis.next()) {
+                    System.out.println("Prenom :"+resBis.getString("i.Prenom"));
+                    System.out.println("Nom :"+resBis.getString("i.nom"));
+                }
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void afficherListeTD2(Statement stmt, Connection conn, int groupe_id)
+    {
+
+            ArrayList<String> mat = new ArrayList<String>();
+            int stockage =0;
+
+        try {
+
+            PreparedStatement requete = conn.prepareStatement("SELECT etudiant.matricule_etudiant_id, etudiant.identite_id FROM  groupe_etudiant, etudiant WHERE groupe_etudiant.groupe_id = ? AND groupe_etudiant.matricule_etudiant_id = etudiant.matricule_etudiant_id ");
+
+            requete.setInt(1,groupe_id);
+
+            ResultSet rs = requete.executeQuery();
+            while (rs.next())
+            {
+               stockage = rs.getInt("identite_id");
+               PreparedStatement requete2 = conn.prepareStatement("SELECT prenom, nom FROM identite WHERE identite_id = ?");
+               requete2.setInt(1,stockage);
+                ResultSet rs2 = requete2.executeQuery();
+                while (rs2.next()) {
+                    mat.add(rs2.getString("nom") + rs2.getString(" prenom"));
+                }
+            }
+
+            System.out.println("La liste : ");
+            for (String m : mat)
+            {
+                System.out.println(m);
+            }
+
+
+        }
+
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
