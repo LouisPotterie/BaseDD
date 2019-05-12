@@ -223,7 +223,7 @@ public class Connect {
 
                             int etudiant_id = key2.nextInt();
 
-                            admin.creationEvaluation(stmt, conn, note, type_eval, pourcentage,cours_id, etudiant_id);
+                            prof.creationEvaluation(stmt, conn, note, type_eval, pourcentage,cours_id, etudiant_id);
 
                             break;
 
@@ -232,7 +232,7 @@ public class Connect {
                             Scanner input = new Scanner(System.in);
                             System.out.println("Quel est l'id de l'etudiant ? ");
                             int student_id = input.nextInt();
-                            admin.creationReleveNote(stmt, conn,student_id);
+                            prof.creationReleveNote(stmt, conn,student_id);
 
 
                             break;
@@ -258,18 +258,16 @@ public class Connect {
 
 
 
-
-
-
-
-
-
-
             }
 
             if (type_user == 3)
             {
                 Etudiant etudiant = new Etudiant();
+
+                int choix = 0;
+
+
+
             }
 
 
@@ -357,7 +355,7 @@ public class Connect {
         do {
 
             System.out.println("Id : ");
-            int id = kb.nextInt();
+            String id = kb.nextLine();
 
             System.out.println("Mot de passe : ");
 
@@ -365,7 +363,7 @@ public class Connect {
 
             try {
                 PreparedStatement requete = conn.prepareStatement("SELECT * FROM utilisateur  WHERE EXISTS (SELECT id, password, type_user FROM utilisateur WHERE id = ? AND password = ?)");
-                requete.setInt(1, id);
+                requete.setString(1, id);
                 requete.setString(2, password);
                 ResultSet rs = requete.executeQuery();
                 while (rs.next())
@@ -376,7 +374,7 @@ public class Connect {
                 if(exist!=0)
                 {
                     PreparedStatement requete2 = conn.prepareStatement("SELECT type_user FROM utilisateur  WHERE id = ? AND password = ?");
-                    requete2.setInt(1, id);
+                    requete2.setString(1, id);
                     requete2.setString(2, password);
                     ResultSet rs2 = requete2.executeQuery();
                     while (rs2.next())
