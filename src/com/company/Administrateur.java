@@ -159,7 +159,7 @@ public class Administrateur {
 
 
 
-    public static int NouveauMatricule(Statement stmt, Connect conn) throws SQLException{
+    public static int NouveauMatricule(Statement stmt, Connection conn) throws SQLException{
 
 
         int Matricule;
@@ -199,11 +199,16 @@ public class Administrateur {
 
     }
 
-    public void creationEtudiant(Statement stmt, Connection conn, int matricule_etudiant_id, int coordonnee_id, int identite_id, int responsable_id)
+    public void creationEtudiant(Statement stmt, Connection conn, int coordonnee_id, int identite_id, int responsable_id)
     {
         try {
             System.out.println("Création d'un nouveau etudiant");
             //stmt.executeUpdate("INSERT INTO groupe VALUES ('')");
+
+            int matricule_etudiant_id = NouveauMatricule(stmt,conn);
+
+            System.out.println("Matricule " + matricule_etudiant_id);
+
 
             PreparedStatement requete = conn.prepareStatement("INSERT INTO etudiant (matricule_etudiant_id, coordonnee_id, identite_id, responsable_id) VALUES (?,?,?,?)");
             requete.setInt(1,matricule_etudiant_id);
@@ -212,6 +217,7 @@ public class Administrateur {
             requete.setInt(4,responsable_id);
 
             requete.execute();
+
 
         }
         catch (Exception e) {
@@ -254,7 +260,7 @@ public class Administrateur {
 
 
 
-    public void creationResponsable(Statement stmt, Connection conn, int coordonnee_id, int identite_id)
+    public int creationResponsable(Statement stmt, Connection conn, int coordonnee_id, int identite_id)
     {
         try {
             System.out.println("Création d'un nouveau responsable");
@@ -272,8 +278,20 @@ public class Administrateur {
         catch (Exception e) {
             e.printStackTrace();
         }
+        int responsable_id = 0;
+
+        try {
 
 
+            ResultSet result = stmt.executeQuery("SELECT COUNT(responsable_id) FROM responsable");
+            result.next();
+            responsable_id = result.getInt(1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return responsable_id;
     }
 
     public void creationCours(Statement stmt, Connection conn)
@@ -415,6 +433,143 @@ public class Administrateur {
         catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void associationEtudiantGroupe (Statement stmt, Connection conn)
+    {
+        int stockage =0;
+        int stockage2=0;
+
+        try {
+            System.out.println("Choisir un etudiant : ");
+            Scanner kb = new Scanner(System.in);
+
+            int matricule_etudiant_id = kb.nextInt();
+
+            PreparedStatement etudiant = conn.prepareStatement("SELECT matricule_etudiant_id FROM etudiant WHERE matricule_etudiant_id = ?");
+            etudiant.setInt(1,matricule_etudiant_id);
+            ResultSet rs = etudiant.executeQuery();
+           while (rs.next())
+           {
+               stockage = rs.getInt("matricule_etudiant_id");
+           }
+
+           System.out.println(stockage);
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            System.out.println("Choisir un groupe : ");
+            Scanner kb = new Scanner(System.in);
+
+            String nom_groupe = kb.nextLine();
+
+            PreparedStatement groupe = conn.prepareStatement("SELECT groupe_id FROM groupe WHERE nom_groupe = ?");
+            groupe.setString(1,nom_groupe);
+            ResultSet rs = groupe.executeQuery();
+            while (rs.next())
+            {
+                stockage2 = rs.getInt("groupe_id");
+            }
+
+            System.out.println(stockage2);
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            System.out.println("Assignation d'un etudiant à son groupe ");
+
+
+            PreparedStatement requete = conn.prepareStatement("INSERT INTO groupe_etudiant (groupe_id,matricule_etudiant_id) VALUES (?,?)");
+
+            requete.setInt(1,stockage2);
+            requete.setInt(2,stockage);
+
+            requete.execute();
+
+        }
+
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public void associationProfesseurCours (Statement stmt, Connection conn)
+    {
+        int stockage =0;
+        int stockage2=0;
+
+        try {
+            System.out.println("Choisir un professeur par son nom : ");
+            Scanner kb = new Scanner(System.in);
+
+            String nom = kb.nextLine();
+
+            PreparedStatement etudiant = conn.prepareStatement("SELECT matricule_professeur_id FROM professeur INNER JOIN identite ON professeur.identité_id = identite.identite_id WHERE identite.nom = ?");
+            etudiant.setString(1,nom);
+            ResultSet rs = etudiant.executeQuery();
+            while (rs.next())
+            {
+                stockage = rs.getInt("matricule_professeur_id");
+            }
+
+            System.out.println(stockage);
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            System.out.println("Choisir un cours par son nom : ");
+            Scanner kb = new Scanner(System.in);
+
+            String nom_cours = kb.nextLine();
+
+            PreparedStatement cours = conn.prepareStatement("SELECT cours_id FROM cours WHERE nom = ?");
+            cours.setString(1,nom_cours);
+            ResultSet rs = cours.executeQuery();
+            while (rs.next())
+            {
+                stockage2 = rs.getInt("cours_id");
+            }
+
+            System.out.println(stockage2);
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            System.out.println("Assignation d'un professeur à un cours ");
+
+
+            PreparedStatement requete = conn.prepareStatement("INSERT INTO professeur_cours (matricule_professeur_id, cours_id) VALUES (?,?)");
+
+            requete.setInt(1,stockage);
+            requete.setInt(2,stockage2);
+
+            requete.execute();
+
+        }
+
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 
