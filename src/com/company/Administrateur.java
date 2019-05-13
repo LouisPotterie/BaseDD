@@ -86,11 +86,11 @@ public class Administrateur {
         System.out.println("Vous allez ajouter une adresse \n\n Saisir son numero de rue :");
         Scanner sc = new Scanner(System.in);
         Scanner sc1 = new Scanner(System.in);
-        int numero_rue = sc.nextInt();
+        int numero_rue = inputWithOnlyInt();
         System.out.println("Nom de rue : ");
         String nom_rue = sc1.nextLine();
         System.out.println("Code Postal : ");
-        int code_postal= sc.nextInt();
+        int code_postal= inputWithOnlyInt();
         System.out.println("Ville: ");
         String ville= sc1.nextLine();
         int adresse_id = 0;
@@ -126,7 +126,7 @@ public class Administrateur {
         System.out.println("Vous allez ajouter une Coordonnee  \n\n Saisir son numero de telephone:");
         Scanner sc = new Scanner(System.in);
         Scanner sc1 = new Scanner(System.in);
-        int numero_telephone = sc.nextInt();
+        int numero_telephone = inputWithOnlyInt();
         System.out.println("mail : ");
         String mail = sc1.nextLine();
 
@@ -311,15 +311,15 @@ public class Administrateur {
         System.out.println("Description : ");
         String description = sc1.nextLine();
         System.out.println("Annee : ");
-        int annee = sc.nextInt();
+        int annee = inputWithOnlyInt();
         System.out.println(" Coefficient : ");
-        int coefficient = sc1.nextInt();
+        int coefficient = inputWithOnlyInt();
         System.out.println(" Pourcentage DE : ");
-        int pourcentage_DE = sc1.nextInt();
+        int pourcentage_DE = inputWithOnlyInt();
         System.out.println(" Pourcentage TP : ");
-        int pourcentage_TP = sc1.nextInt();
+        int pourcentage_TP = inputWithOnlyInt();
         System.out.println(" Pourcentage projet : ");
-        int pourcentage_Projet = sc1.nextInt();
+        int pourcentage_Projet = inputWithOnlyInt();
 
 
         try {
@@ -394,7 +394,7 @@ public class Administrateur {
 
             System.out.println("Quel est l'id de l'etudiant ?");
             Scanner input12 = new Scanner(System.in);
-            int etudiant_ID = input12.nextInt();
+            int etudiant_ID = inputWithOnlyInt();
 
             System.out.println("Quel type d'evaluation vous voulez modifier ? DE / TP / CE");
             Scanner input13 = new Scanner(System.in);
@@ -417,11 +417,11 @@ public class Administrateur {
             Scanner sc = new Scanner(System.in);
             System.out.println("Que voulez-vous modifier");
             System.out.println("1. Note\n2. type_eval\n3. pourcentage\nChoix :");
-            choix = sc.nextInt();
+            choix = inputWithOnlyInt();
             switch(choix){
                 case 1:
                     System.out.println("Inserez la nouvelle note :");
-                    note = sc.nextInt();
+                    note = inputWithOnlyInt();
                     PreparedStatement requete_note = conn.prepareStatement("UPDATE evaluation SET note = "+ note +" WHERE evaluation_id = "+eval_id+";");
                     requete_note.execute();
                     break;
@@ -433,7 +433,7 @@ public class Administrateur {
                     break;
                 case 3:
                     System.out.println("Inserez le nouveau pourcentage :");
-                    pourcentage = sc.nextInt();
+                    pourcentage = inputWithOnlyInt();
                     PreparedStatement requete_pourcentage = conn.prepareStatement("UPDATE evaluation SET pourcentage = "+ pourcentage +" WHERE evaluation_id = "+eval_id+";");
                     requete_pourcentage.execute();
                     break;
@@ -480,7 +480,7 @@ public class Administrateur {
             System.out.println("Choisir un etudiant : ");
             Scanner kb = new Scanner(System.in);
 
-            int matricule_etudiant_id = kb.nextInt();
+            int matricule_etudiant_id = inputWithOnlyInt();
 
             PreparedStatement etudiant = conn.prepareStatement("SELECT matricule_etudiant_id FROM etudiant WHERE matricule_etudiant_id = ?");
             etudiant.setInt(1,matricule_etudiant_id);
@@ -729,6 +729,20 @@ public class Administrateur {
         }
 
 
+    }
+
+
+    public int inputWithOnlyInt()
+    {
+        Scanner kb = new Scanner(System.in);
+
+        System.out.print("-> ");
+        while (!kb.hasNextInt())  //si la selection est différente d'un entier on coninue de demander une saisie
+        {
+            System.out.print("Veuillez choisir un nombre valide\n-> ");
+            kb.next();
+        }
+        return kb.nextInt();
     }
 
 

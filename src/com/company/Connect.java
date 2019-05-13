@@ -46,7 +46,7 @@ public class Connect {
 
                     System.out.println("Que voulez-vous faire ? ");
                     Scanner kb = new Scanner(System.in);
-                    choix = kb.nextInt();
+                    choix = inputWithOnlyInt();
 
                     switch (choix)
                     {
@@ -58,7 +58,7 @@ public class Connect {
                             admin.creationProfesseur(stmt,conn,coordonnee,id);
                             System.out.println("Voulez vous assigner le professeur à un cours ?");
                             Scanner key = new Scanner(System.in);
-                            int answer = key.nextInt();
+                            int answer = inputWithOnlyInt();
                             if (answer == 1 )
                             {
                                 admin.associationProfesseurCours(stmt,conn);
@@ -78,7 +78,7 @@ public class Connect {
 
                             Scanner kb2 = new Scanner(System.in);
 
-                            int choix2 = kb2.nextInt();
+                            int choix2 = inputWithOnlyInt();
 
                             if (choix2 == 2)
                             {
@@ -97,7 +97,7 @@ public class Connect {
 
                             System.out.println("Voulez vous assigner l'etudiant à un cours ? 1 pour oui 2 pour non ");
                             Scanner key2 = new Scanner(System.in);
-                            int answer2 = key2.nextInt();
+                            int answer2 = inputWithOnlyInt();
                             if (answer2 == 1 )
                             {
                                 admin.associationEtudiantGroupe2(stmt,conn, new_etudiant);
@@ -123,21 +123,21 @@ public class Connect {
                             Scanner key3 = new Scanner(System.in);
 
                             System.out.println("Quelle est la note ? ");
-                            int note = key5.nextInt();
+                            int note = inputWithOnlyInt();
 
                             System.out.println("Quelle est le type d'evaluation DE / TP / PJ  ? ");
                             String type_eval = key3.nextLine();
 
                             System.out.println("Quel est le pourcentage ? ");
-                            int pourcentage = key5.nextInt();
+                            int pourcentage = inputWithOnlyInt();
 
                             System.out.println("Quel est le cours id correspondant ?");
 
-                            int cours_id = key5.nextInt();
+                            int cours_id = inputWithOnlyInt();
 
                             System.out.println("Quel est l'id de l'etudiant ? ");
 
-                            int etudiant_id = key5.nextInt();
+                            int etudiant_id = inputWithOnlyInt();
 
                             admin.creationEvaluation(stmt, conn, note, type_eval, pourcentage,cours_id, etudiant_id);
                             break;
@@ -146,7 +146,7 @@ public class Connect {
 
                             Scanner input = new Scanner(System.in);
                             System.out.println("Quel est l'id de l'etudiant ? ");
-                            int student_id = input.nextInt();
+                            int student_id = inputWithOnlyInt();
                             admin.creationReleveNote(stmt, conn,student_id);
 
                             break;
@@ -155,7 +155,7 @@ public class Connect {
 
                             Scanner input2 = new Scanner(System.in);
                             System.out.println("Quel est le groupe id du groupe à afficher ? ");
-                            int grp_id = input2.nextInt();
+                            int grp_id = inputWithOnlyInt();
                             admin.afficherListeTD2(stmt,conn, grp_id);
 
                             break;
@@ -169,7 +169,7 @@ public class Connect {
 
                             System.out.println("Etes vous sur de fermer l'application ? (1 : oui) (2 : non)");
                             Scanner abc = new Scanner(System.in);
-                            int end = abc.nextInt();
+                            int end = inputWithOnlyInt();
 
                             if (end == 1)
                             {
@@ -204,7 +204,7 @@ public class Connect {
 
                     System.out.println("Que voulez-vous faire ? ");
                     Scanner kb = new Scanner(System.in);
-                    choix = kb.nextInt();
+                    choix = inputWithOnlyInt();
 
                     switch (choix)
                     {
@@ -214,21 +214,21 @@ public class Connect {
                             Scanner key3 = new Scanner(System.in);
 
                             System.out.println("Quelle est la note ? ");
-                            int note = key2.nextInt();
+                            int note = inputWithOnlyInt();
 
                             System.out.println("Quelle est le type d'evaluation DE / TP / PJ  ? ");
                             String type_eval = key3.nextLine();
 
                             System.out.println("Quel est le pourcentage ? ");
-                            int pourcentage = key2.nextInt();
+                            int pourcentage = inputWithOnlyInt();
 
                             System.out.println("Quel est le cours id correspondant ?");
 
-                            int cours_id = key2.nextInt();
+                            int cours_id = inputWithOnlyInt();
 
-                            System.out.println("Quel est l'id de l'etudiant ? ");
+                            System.out.println("Quel est l'id de l'etudiant ? (ex : 2019001) ");
 
-                            int etudiant_id = key2.nextInt();
+                            int etudiant_id = inputWithOnlyInt();
 
                             prof.creationEvaluation(stmt, conn, note, type_eval, pourcentage,cours_id, etudiant_id);
 
@@ -238,7 +238,7 @@ public class Connect {
 
                             Scanner input = new Scanner(System.in);
                             System.out.println("Quel est l'id de l'etudiant ? ");
-                            int student_id = input.nextInt();
+                            int student_id = inputWithOnlyInt();
                             prof.creationReleveNote(stmt, conn,student_id);
 
 
@@ -248,7 +248,7 @@ public class Connect {
 
                             Scanner input2 = new Scanner(System.in);
                             System.out.println("Quel est le groupe id du groupe à afficher ? ");
-                            int grp_id = input2.nextInt();
+                            int grp_id = inputWithOnlyInt();
                             prof.afficherListeTD2(stmt,conn,grp_id);
                             break;
 
@@ -261,7 +261,7 @@ public class Connect {
 
                             System.out.println("Etes vous sur de fermer l'application ? (1 : oui) (2 : non)");
                             Scanner abc = new Scanner(System.in);
-                            int end = abc.nextInt();
+                            int end = inputWithOnlyInt();
 
                             if (end == 1)
                             {
@@ -291,7 +291,7 @@ public class Connect {
 
                     System.out.println("Que voulez-vous faire ? ");
                     Scanner kb = new Scanner(System.in);
-                    choix = kb.nextInt();
+                    choix = inputWithOnlyInt();
 
                     switch (choix)
                     {
@@ -305,14 +305,14 @@ public class Connect {
 
                             Scanner input2 = new Scanner(System.in);
                             System.out.println("Quel est le groupe id du groupe à afficher ? ");
-                            int grp_id = input2.nextInt();
+                            int grp_id = inputWithOnlyInt();
                             etudiant.afficherListeTD2(stmt,conn,grp_id);
                             break;
 
                         case 3:
                             System.out.println("Etes vous sur de fermer l'application ? (1 : oui) (2 : non)");
                             Scanner abc = new Scanner(System.in);
-                            int end = abc.nextInt();
+                            int end = inputWithOnlyInt();
 
                             if (end == 1)
                             {
@@ -397,4 +397,32 @@ public class Connect {
 
         return type_user;
     }
+
+
+    public static int inputWithOnlyInt()
+    {
+        Scanner kb = new Scanner(System.in);
+
+        System.out.print("-> ");
+        while (!kb.hasNextInt())  //si la selection est différente d'un entier on coninue de demander une saisie
+        {
+            System.out.print("Veuillez choisir un nombre valide\n-> ");
+            kb.next();
+        }
+        return kb.nextInt();
+    }
+
+    public static String inputWithOnlyString()
+    {
+        Scanner kb2 = new Scanner(System.in);
+
+        System.out.print("-> ");
+        while (!kb2.hasNextLine())  //si la selection est différente d'un entier on coninue de demander une saisie
+        {
+            System.out.print("Veuillez choisir une string valide\n-> ");
+            kb2.next();
+        }
+        return kb2.nextLine();
+    }
+
 }

@@ -32,7 +32,7 @@ public class Etudiant {
                 requete2.setInt(1,stockage);
                 ResultSet rs2 = requete2.executeQuery();
                 while (rs2.next()) {
-                    mat.add(rs2.getString("nom") + rs2.getString(" prenom"));
+                    mat.add(rs2.getString("nom") + " " +rs2.getString("prenom") );
                 }
             }
 
